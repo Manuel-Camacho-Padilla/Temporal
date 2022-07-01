@@ -1,4 +1,4 @@
-```
+
 # Copyright (c) 2010 Aldo Cortesi
 # Copyright (c) 2010, 2014 dequis
 # Copyright (c) 2012 Randall Ma
@@ -104,7 +104,7 @@ keys = [
     Key([mod], "b", lazy.spawn(browser)),
 
     # File Explorer
-    Key([mod], "e", lazy.spawn("pcmanfm")),
+    Key([mod], "e", lazy.spawn("thunar")),
 
     # Terminal
     Key([mod], "Return", lazy.spawn(terminal)),
@@ -137,31 +137,39 @@ keys = [
 
 # WORKSPACES
 
-groups = [Group(i) for i in "123456789"]
+#groups = [ Group(f"{i+1}", label="♥") for i in range(5)]
+groups = [ Group(f"{i+1}", label="") for i in range(5)]
+
+#  groups = [
+    #  Group("1", label=""),
+    #  Group("2", label=""),
+    #  Group("3", label=""),
+    #  #  Group(
+        #  #  "3",
+        #  #  label="",
+        #  #  matches=[
+            #  #  Match(wm_class=["zoom"]),
+        #  #  ],
+    #  #  ),
+    #  Group("4", label=""),
+    #  Group("5", label="")
+#  ]
+
 
 for i in groups:
-    keys.extend(
-        [
-            # mod1 + letter of group = switch to group
-            Key(
-                [mod],
-                i.name,
-                lazy.group[i.name].toscreen(),
-                desc="Switch to group {}".format(i.name),
-            ),
-            # mod1 + shift + letter of group = switch to & move focused window to group
-            Key(
-                [mod, "shift"],
-                i.name,
-                lazy.window.togroup(i.name, switch_group=True),
-                desc="Switch to & move focused window to group {}".format(i.name),
-            ),
-            # Or, use below if you prefer not to switch to that group.
-            # # mod1 + shift + letter of group = move focused window to group
-            # Key([mod, "shift"], i.name, lazy.window.togroup(i.name),
-            #     desc="move focused window to group {}".format(i.name)),
-        ]
-    )
+    keys.extend([
+        # mod1 + letter of group = switch to group
+        Key([mod], i.name, lazy.group[i.name].toscreen(),
+            desc="Switch to group {}".format(i.name)),
+
+        # mod1 + shift + letter of group = switch to & move focused window to group
+        Key([mod, "shift"], i.name, lazy.window.togroup(i.name, switch_group=True),
+            desc="Switch to & move focused window to group {}".format(i.name)),
+        # Or, use below if you prefer not to switch to that group.
+        # # mod1 + shift + letter of group = move focused window to group
+        # Key([mod, "shift"], i.name, lazy.window.togroup(i.name),
+        #     desc="move focused window to group {}".format(i.name)),
+    ])
 
 
 
@@ -435,4 +443,3 @@ wl_input_rules = None
 wmname = "qtile"
 #wmname = "LG3D"
 
-```
