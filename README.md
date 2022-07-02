@@ -1,30 +1,4 @@
-```
-# Copyright (c) 2010 Aldo Cortesi
-# Copyright (c) 2010, 2014 dequis
-# Copyright (c) 2012 Randall Ma
-# Copyright (c) 2012-2014 Tycho Andersen
-# Copyright (c) 2012 Craig Barnes
-# Copyright (c) 2013 horsik
-# Copyright (c) 2013 Tao Sauvage
-#
-# Permission is hereby granted, free of charge, to any person obtaining a copy
-# of this software and associated documentation files (the "Software"), to deal
-# in the Software without restriction, including without limitation the rights
-# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-# copies of the Software, and to permit persons to whom the Software is
-# furnished to do so, subject to the following conditions:
-#
-# The above copyright notice and this permission notice shall be included in
-# all copies or substantial portions of the Software.
-#
-# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-# SOFTWARE.
-from libqtile import hook
+```from libqtile import hook
 import os
 import subprocess 
 
@@ -36,14 +10,12 @@ from libqtile.utils import guess_terminal
 # AUTOSTART
 @hook.subscribe.startup_once
 def autostart():
-#    qtile_path = path.join(path.expanduser('~'), ".config", "qtile")
-#    subprocess.call([path.join(qtile_path, 'autostart.sh')])
     home = os.path.expanduser('~/.config/qtile/autostart.sh')
     subprocess.call([home])
 
 mod = "mod4"
 terminal = "kitty"
-browser = "brave" #firefox
+browser = "brave" 
 
 keys = [
     # ------------ Window Configs ------------
@@ -139,23 +111,21 @@ keys = [
 
 #groups = [ Group(f"{i+1}", label="♥") for i in range(5)]
 groups = [ Group(f"{i+1}", label="") for i in range(5)]
-
-#  groups = [
-    #  Group("1", label=""),
-    #  Group("2", label=""),
-    #  Group("3", label=""),
-    #  #  Group(
-        #  #  "3",
-        #  #  label="",
-        #  #  matches=[
-            #  #  Match(wm_class=["zoom"]),
-        #  #  ],
-    #  #  ),
-    #  Group("4", label=""),
-    #  Group("5", label="")
-#  ]
-
-
+""" groups = [
+    Group("1", label=""),
+    Group("2", label=""),
+    Group("3", label=""),
+    Group(
+        "3",
+        label="",
+        matches=[
+        Match(wm_class=["zoom"]),
+      ],
+    ),
+    Group("4", label=""),
+    Group("5", label="")
+]
+"""
 for i in groups:
     keys.extend([
         # mod1 + letter of group = switch to group
@@ -174,8 +144,6 @@ for i in groups:
 
 
 # LAYOUTS
-
-# First, some color
 catppuccin = {
     "flamingo": "#F2CDCD",
     "mauve": "#DDB6F2",
@@ -193,9 +161,26 @@ catppuccin = {
     "black1": "#1A1826",
 }
 
+rose_pine = {
+    "bg": "#1f1d2e",
+    "fg": "#e0def4",
+    "fg_gutter": "#555169",
+    "black": "#191724",
+    "red": "#eb6f92",
+    "green": "#31748f",
+    "yellow": "#f6c177",
+    "blue": "#9ccfd8",
+    "magenta": "#c4a7e7",
+    "cyan": "#555169",
+    "white": "#e0def4",
+    "orange": "#6e6a86",
+    "pink": "#2a2837"
+}
+colors = rose_pine
+
 default_layout_config = {
-    "border_focus": catppuccin["green"],
-    "border_normal": catppuccin["red"],
+    "border_focus": colors["green"],
+    "border_normal": colors["red"],
     "border_width": 2,
     "margin": 3,
 }
@@ -241,194 +226,210 @@ mouse = [
 # PANEL
 
 widget_defaults = dict(
-    font="JetBrainsMono Nerd Font",
-    fontsize=16,
-    padding=3,
-    foreground=catppuccin["black1"],
+    font = "JetBrainsMono Nerd Font",
+    fontsize = 16,
+    padding = 3,
+    foreground = "#000000",
 )
 extension_defaults = widget_defaults.copy()
 
 
 def get_widgets(primary=False):
     widgets = [
-        widget.Spacer(length=3, background="#00000000"),
-        widget.TextBox(
-            text="",
-            padding=0,
-            fontsize=30,
-            foreground=catppuccin["pink"],
-            background="#00000000",
+         widget.TextBox(
+            text = "",
+            padding = 0,
+            fontsize = 30,
+            foreground = colors["magenta"],
+            background = "#00000000",
+            mouse_callbacks = {"Button1": lazy.spawn("rofi -show drun")},
         ),
         widget.TextBox(
-            text="異",
-            mouse_callbacks={"Button1": lazy.spawn("rofi -show drun")},
-            background=catppuccin["pink"],
+            text = "   ",
+            fontsize = 20,
+            padding = 0,
+            mouse_callbacks = {"Button1": lazy.spawn("rofi -show drun")},
+            background = colors["magenta"],
+            foreground = colors["black"]
         ),
         widget.TextBox(
-            text="",
-            padding=0,
-            fontsize=30,
-            foreground=catppuccin["pink"],
-            background=catppuccin["red"],
+            text = "",
+            padding = 0,
+            fontsize = 30,
+            foreground = colors["black"],
+            background = colors["magenta"],
         ),
-        widget.CurrentLayoutIcon(
-            padding=1,
-            scale=0.8,
-            background=catppuccin["red"],
-            custom_icon_paths=["/home/mjs/.config/qtile/icons/"],
+        widget.CurrentLayout(
+            foreground = colors["white"],
+            background = colors["black"],
         ),
-        widget.CurrentLayout(background=catppuccin["red"]),
-        widget.TextBox(
-            text="",
-            padding=0,
-            fontsize=30,
-            foreground=catppuccin["red"],
-            background=catppuccin["peach"],
-        ),
+
         widget.GroupBox(
-            highlight_method="line",
-            background=catppuccin["peach"],
-            highlight_color=[catppuccin["peach"], catppuccin["peach"]],
-            other_screen_border=catppuccin["gray0"],
-            other_current_screen_border=catppuccin["white"],
-            this_current_screen_border=catppuccin["white"],
-            this_screen_border=catppuccin["gray0"],
-            inactive=catppuccin["black1"],
+            #font = font["clear"]["family"],
+            #padding = font["clear"]["padding"],
+            #fontsize = font["clear"]["fontsize"],
+            foreground = colors["cyan"],
+            highlight_method = "text",
+            block_highlight_text_color = colors["white"],
+            active = colors["fg"],
+            inactive = colors["cyan"],
+            rounded = False,
+            highlight_color = [colors["fg"], colors["yellow"]],
+            urgent_alert_method = "line",
+            urgent_text = colors["red"],
+            urgent_border = colors["red"],
+            disable_drag = True,
+            use_mouse_wheel = False,
+            hide_unused = False,
+            spacing = 5,
+            this_current_screen_border = colors["yellow"],
+            background = colors["black"]
         ),
         widget.TextBox(
-            text="", padding=0, fontsize=30, foreground=catppuccin["peach"]
+            text = "",
+            padding = 0,
+            fontsize = 30,
+            foreground = colors["fg_gutter"],
+            background = colors["black"],
         ),
-        widget.WindowName(fontsize=12, foreground=catppuccin["black1"]),
-        widget.Net(
-            fmt="{}",
-            format='{down} ↓↑ {up}',
-            background=catppuccin["green"],
-            prefix='k'
+        widget.WindowName(
+            #font = windowname,
+            fontsize = 16,
+            padding = 3,
+            format = '{state}{name}',
+            foreground = colors["white"],
+            background = colors["fg_gutter"],
+            center_aligned = True
         ),
-        widget.ThermalSensor(
-            fmt="{}",
-            format='{tag}: {temp:.0f}{unit}',
-            background=catppuccin["green"],
+        widget.Wallpaper(
+            directory = '/home/manu320/.config/wallpapers/',
+            random_selection = True,
+            fmt='  ',
+            foreground = colors["white"],
+            background = colors["fg_gutter"],
         ),
-        widget.TextBox(text="", padding=0, fontsize=30, foreground=catppuccin["teal"], background=catppuccin["green"]),
         widget.PulseVolume(
-            fmt="墳 {}",
-            mute_command="amixer -D pulse set Master toggle",
-            background=catppuccin["teal"],
+            fmt = "墳 {} ",
+            mute_command = "amixer -D pulse set Master toggle",
+            foreground = colors["white"],
+            background = colors["fg_gutter"],
         ),
         widget.TextBox(
-            text="",
-            padding=0,
-            fontsize=30,
-            foreground=catppuccin["green"],
-            background=catppuccin["teal"],
+            text = "",
+            padding = 0,
+            fontsize = 30,
+            foreground = colors["yellow"],
+            background = colors["fg_gutter"],
         ),
         widget.CPU(
-            format=" {load_percent:04}%",
+            format=" {load_percent:04}% ",
             mouse_callbacks={"Button1": lazy.spawn("kitty -e htop")},
-            background=catppuccin["green"],
+            background = colors["yellow"],
+            foreground = colors["bg"]
+        ),
+        widget.Memory(
+            format = '{MemUsed: .0f}{mm}/{MemTotal:.0f}{mm} ',
+            padding = 0,
+            fontsize = 16,
+            measure_mem = 'G',
+            measure_swap = 'G',
+            foreground = colors["black"],
+            background = colors["yellow"],
         ),
         widget.TextBox(
-            text="",
-            padding=0,
-            fontsize=30,
-            foreground=catppuccin["yellow"],
-            background=catppuccin["green"],
+            text = "",
+            padding = 0,
+            fontsize = 30,
+            foreground = colors["magenta"],
+            background = colors["yellow"],
+        ),
+        widget.Battery(
+            format = "{char} {percent:2.0%} ",
+            charge_char = "",
+            discharge_char = "",
+            full_char = "",
+            unknown_char = "",
+            empty_char = "",
+            show_short_text = False,
+            background = colors["magenta"],
         ),
         widget.ThermalZone(
-            format=' {temp}°C -',
+            format=' {temp}°C',
             format_crit = '{temp}°C',
             crit = 60,
-            high = 15,
+            high = 40,
             fgcolor_crit = 'ff0000',
             fgcolor_high = 'ffaa00',
             fgcolor_normal= '000000',
-            background=catppuccin["yellow"]
+            background = colors["magenta"]
         ),
         widget.NvidiaSensors(
-            format='{temp}°C',
-            threshold=60,
-            foreground_alert='ff6000',
-            foreground="000000",
-            background=catppuccin["yellow"]
+            format = '| {temp}°C ',
+            threshold=  68,
+            foreground_alert = 'ff6000',
+            foreground = "000000",
+            background = colors["magenta"]
         ),
         widget.TextBox(
-            text="",
-            padding=0,
-            fontsize=30,
-            foreground=catppuccin["yellow"],
-            background=catppuccin["green"],
-        ),
-        widget.Memory(
-            format = '{MemUsed: .0f}{mm}/{MemTotal:.0f}{mm}',
-            background=catppuccin["yellow"],
+            text = "",
             padding = 0,
-            measure_mem = 'G',
-            measure_swap = 'G'
+            fontsize = 30,
+            foreground = colors["pink"],
+            background = colors["magenta"],
+        ),
+         widget.Net(
+            fmt="{}",
+            format="\u2193 {down} \u2191 {up} ",
+            prefix='k',
+            update_interval = 3,
+            foreground = colors["white"],
+            background = colors["pink"]
         ),
         widget.TextBox(
-            text="",
-            padding=0,
-            fontsize=30,
-            foreground=catppuccin["peach"],
-            background=catppuccin["yellow"],
+            text = "",
+            padding = 0,
+            fontsize = 30,
+            foreground = colors["fg_gutter"],
+            background = colors["pink"],
         ),
         widget.Clock(
-            format=" %a %d/%m/%y %I:%M %p", 
-            background=catppuccin["peach"]
+            format="%d/%m/%y - %I:%M %p", 
+            foreground = colors["white"],
+            background = colors["fg_gutter"]
         ),
         widget.TextBox(
-            text="",
+            text="",
             padding=0,
             fontsize=30,
-            foreground=catppuccin["red"],
-            background=catppuccin["peach"],
-        ),
-        widget.Battery(
-            format="{char} {percent:2.0%}",
-            charge_char="",
-            discharge_char="",
-            full_char="",
-            unknown_char="",
-            empty_char="",
-            show_short_text=False,
-            background=catppuccin["red"],
-        ),
-        widget.TextBox(
-            text="",
-            padding=0,
-            fontsize=30,
-            foreground=catppuccin["pink"],
-            background=catppuccin["red"],
+            foreground=colors["fg_gutter"],
+            background="00000000"
         ),
         widget.Spacer(length=3, background="#00000000"),
     ]
     if primary:
-        widgets.insert(10, widget.Systray())
+        widgets.insert(7, widget.Systray())
     return widgets
 
 
 screens = [
     Screen(
-        top=bar.Bar(
-            get_widgets(primary=True),
-            24,
-            background="#00000000",
-            margin=[2, 0, 0, 0],
+        top = bar.Bar(
+            get_widgets(primary = True),
+            30,
+            background = colors["fg_gutter"],
+            margin=[0, 0, 0, 0],
         ),
     ),
     Screen(
-        top=bar.Bar(
+        top = bar.Bar(
             # Use everything except the systray, which would crash
-            get_widgets(primary=False),
-            24,
+            get_widgets(primary = False),
+            30,
             background="#00000000",
-            margin=[2, 0, 0, 0],
+            margin=[0, 0, 0, 0],
         )
     )
 ]
-
-
 
 dgroups_key_binder = None
 dgroups_app_rules = []  # type: list
